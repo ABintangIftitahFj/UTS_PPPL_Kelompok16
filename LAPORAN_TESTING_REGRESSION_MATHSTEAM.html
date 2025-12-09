@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Testing Regression - MathsTeam Website</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #007bff;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .header h2 {
+            color: #6c757d;
+            font-weight: normal;
+            font-size: 18px;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .info-item {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h3 {
+            color: #007bff;
+            border-left: 4px solid #007bff;
+            padding-left: 15px;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        .test-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .summary-card h4 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+        .summary-card p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        tr:hover {
+            background-color: #e3f2fd;
+        }
+        .status-pass {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-fail {
+            background: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .category-smoke {
+            background: #ff6b6b;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+        .category-regression {
+            background: #4ecdc4;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+        .category-critical {
+            background: #ffe66d;
+            color: #333;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+        .results-highlight {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .methodology {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .tool-item {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .tool-item h5 {
+            color: #007bff;
+            margin: 0 0 10px 0;
+        }
+        .conclusion {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #6c757d;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            table {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>LAPORAN TESTING REGRESSION</h1>
+            <h2>Website MathsTeam menggunakan Selenium WebDriver</h2>
+        </div>
+
+        <!-- Project Info -->
+        <div class="info-box">
+            <h3 style="margin-top: 0; color: white;">Informasi Proyek</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Mata Kuliah:</strong><br>
+                    Pengujian Perangkat Lunak (PPPL)
+                </div>
+                <div class="info-item">
+                    <strong>Semester:</strong><br>
+                    5 (Lima)
+                </div>
+                <div class="info-item">
+                    <strong>Kelompok:</strong><br>
+                    A
+                </div>
+                <div class="info-item">
+                    <strong>Tanggal:</strong><br>
+                    23 November 2025
+                </div>
+                <div class="info-item">
+                    <strong>Website Target:</strong><br>
+                    https://mathsteam.id/
+                </div>
+                <div class="info-item">
+                    <strong>Durasi Testing:</strong><br>
+                    ~8 menit (Full Suite)
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Members -->
+        <div class="section">
+            <h3>👥 Anggota Kelompok</h3>
+            <div class="info-grid">
+                <div class="info-item" style="background: #e3f2fd; color: #1565c0; padding: 15px; border-radius: 8px;">
+                    <strong>A Bintang Iftitah FJ</strong><br>
+                    <small>Test Lead & Framework Developer</small>
+                </div>
+                <div class="info-item" style="background: #e3f2fd; color: #1565c0; padding: 15px; border-radius: 8px;">
+                    <strong>Daffa Faiz Restu Oktavian</strong><br>
+                    <small>Test Case Designer & Quality Analyst</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <div class="section">
+            <h3>📊 Ringkasan Eksekutif</h3>
+            <div class="test-summary">
+                <div class="summary-card">
+                    <h4>30</h4>
+                    <p>Total Test Cases</p>
+                </div>
+                <div class="summary-card">
+                    <h4>30</h4>
+                    <p>Passed</p>
+                </div>
+                <div class="summary-card">
+                    <h4>0</h4>
+                    <p>Failed</p>
+                </div>
+                <div class="summary-card">
+                    <h4>100%</h4>
+                    <p>Success Rate</p>
+                </div>
+            </div>
+            
+            <div class="results-highlight">
+                🎉 SEMUA TESTING BERHASIL - WEBSITE MATHSTEAM BERFUNGSI DENGAN SEMPURNA! 🎉
+            </div>
+        </div>
+
+        <!-- Testing Methodology -->
+        <div class="section">
+            <h3>🔬 Metodologi Testing</h3>
+            <div class="methodology">
+                <h4>Pendekatan Testing</h4>
+                <ul>
+                    <li><strong>Black Box Testing:</strong> Menguji fungsionalitas tanpa melihat internal code</li>
+                    <li><strong>Regression Testing:</strong> Memastikan fitur existing tidak rusak</li>
+                    <li><strong>Automated Testing:</strong> Menggunakan Selenium untuk efisiensi dan repeatability</li>
+                    <li><strong>Page Object Model (POM):</strong> Struktur maintainable dan reusable</li>
+                    <li><strong>Cross-browser Testing:</strong> Support Chrome, Firefox, Edge</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Detailed Testing Procedures -->
+        <div class="section">
+            <h3>📋 Tata Cara Pengujian (Testing Procedures)</h3>
+            
+            <h4>🔧 1. Persiapan Environment (Environment Setup)</h4>
+            <div class="methodology">
+                <h5>Prerequisites & Dependencies:</h5>
+                <ol>
+                    <li><strong>Install Python 3.14+</strong>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 12px; color: #333;">
+# Verify Python installation
+python --version
+# Expected output: Python 3.14.0</pre>
+                    </li>
+                    <li><strong>Install Required Dependencies</strong>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 12px; color: #333;">
+pip install selenium pytest pytest-html webdriver-manager python-dotenv
+pip install pytest-xdist pytest-timeout allure-pytest</pre>
+                    </li>
+                    <li><strong>Browser Requirements</strong>
+                        <ul>
+                            <li>Google Chrome (Latest) - Primary browser</li>
+                            <li>Mozilla Firefox (Optional) - Cross-browser testing</li>
+                            <li>Microsoft Edge (Optional) - Cross-browser testing</li>
+                            <li>WebDriver Manager akan otomatis download driver yang sesuai</li>
+                        </ul>
+                    </li>
+                    <li><strong>Configure Environment Variables (.env)</strong>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 12px; color: #333;">
+BASE_URL=https://mathsteam.id/
+LOGIN_EMAIL=admin@tes.com
+LOGIN_PASSWORD=12345678
+BROWSER=chrome
+HEADLESS=false
+IMPLICIT_WAIT=10
+EXPLICIT_WAIT=20
+SCREENSHOTS_ON_FAILURE=true</pre>
+                    </li>
+                </ol>
+            </div>
+
+            <h4>🏗️ 2. Struktur Project Setup</h4>
+            <div class="methodology">
+                <h5>Organisasi File Testing Framework:</h5>
+                <pre style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 11px; color: #333;">
+project_root/
+├── config/
+│   ├── __init__.py
+│   └── config.py              # Konfigurasi URL, credentials, timeouts
+├── pages/                     # Page Object Model Implementation
+│   ├── __init__.py
+│   ├── base_page.py          # Base page class dengan common methods
+│   ├── login_page.py         # Login page locators & methods
+│   └── dashboard_page.py     # Dashboard page locators & methods
+├── tests/                    # Test Cases Implementation
+│   ├── __init__.py
+│   ├── test_login.py         # 8 Login functionality tests
+│   ├── test_dashboard.py     # 11 Dashboard & navigation tests
+│   └── test_website_general.py # 11 General website tests  
+├── utils/
+│   ├── __init__.py
+│   └── driver_manager.py     # WebDriver lifecycle management
+├── reports/                  # Generated test reports & screenshots
+├── .env                     # Environment configuration
+├── conftest.py             # Pytest fixtures & configuration
+├── pytest.ini             # Pytest settings & markers
+├── requirements.txt        # Python dependencies
+├── run_tests.bat          # Windows batch execution script
+├── run_tests.ps1          # PowerShell execution script
+└── cleanup_browsers.bat   # Browser cleanup utility</pre>
+            </div>
+
+            <h4>⚙️ 3. Framework Configuration</h4>
+            <div class="methodology">
+                <h5>Pytest Configuration (pytest.ini):</h5>
+                <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 12px; color: #333;">
+[tool:pytest]
+testpaths = tests
+python_files = test_*.py
+python_classes = Test*
+python_functions = test_*
+markers =
+    smoke: Quick smoke tests for critical functionality
+    regression: Full regression test suite  
+    critical: Critical functionality tests
+    login: Login functionality tests
+    dashboard: Dashboard functionality tests</pre>
+
+                <h5>Page Object Model Structure:</h5>
+                <ul>
+                    <li><strong>base_page.py:</strong> Common methods (find_element, click, send_keys, wait)</li>
+                    <li><strong>login_page.py:</strong> Login-specific locators & methods</li>
+                    <li><strong>dashboard_page.py:</strong> Dashboard navigation & verification methods</li>
+                    <li><strong>Inheritance:</strong> Semua page classes inherit dari BasePage</li>
+                </ul>
+            </div>
+
+            <h4>🚀 4. Prosedur Eksekusi Testing</h4>
+            <div class="methodology">
+                <h5>Step-by-Step Execution:</h5>
+                <ol>
+                    <li><strong>Preparation Phase</strong>
+                        <ul>
+                            <li>Pastikan environment variables sudah di-set di file .env</li>
+                            <li>Verify koneksi internet stabil</li>
+                            <li>Pastikan website target (https://mathsteam.id/) accessible</li>
+                            <li>Close semua browser instances yang sedang running</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Test Execution Commands</strong>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 12px; color: #333;">
+# Smoke Tests (Critical functionality - 6 tests, ~2 minutes)
+pytest -v -m smoke --html=reports/smoke_report.html
+
+# Login Tests Only (8 tests, ~2 minutes)  
+pytest -v -m login --html=reports/login_report.html
+
+# Dashboard Tests Only (11 tests, ~3 minutes)
+pytest -v -m dashboard --html=reports/dashboard_report.html
+
+# Complete Regression Suite (30 tests, ~8 minutes)
+pytest -v --html=reports/comprehensive_report.html --self-contained-html
+
+# With specific browser
+pytest -v --browser=firefox
+
+# Headless mode (faster execution)
+pytest -v --headless</pre>
+                    </li>
+
+                    <li><strong>Alternative Execution (Using Scripts)</strong>
+                        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 12px; color: #333;">
+# Windows PowerShell (Recommended)
+.\run_tests.ps1 smoke          # Quick smoke tests
+.\run_tests.ps1 all            # Complete regression
+.\run_tests.ps1 login          # Login tests only
+
+# Windows Batch
+.\run_tests.bat smoke
+.\run_tests.bat all</pre>
+                    </li>
+                </ol>
+            </div>
+
+            <h4>🔄 5. Test Execution Workflow</h4>
+            <div class="methodology">
+                <h5>Automated Execution Flow:</h5>
+                <ol>
+                    <li><strong>Setup Phase</strong>
+                        <ul>
+                            <li>Load environment configuration dari .env file</li>
+                            <li>Initialize WebDriver dengan browser yang dipilih</li>
+                            <li>Setup implicit waits & explicit waits</li>
+                            <li>Create screenshots directory untuk failure captures</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Test Execution Phase</strong>
+                        <ul>
+                            <li>Execute tests berdasarkan markers (smoke/regression/login/dashboard)</li>
+                            <li>Setiap test case:
+                                <ul>
+                                    <li>Initialize fresh browser instance</li>
+                                    <li>Navigate ke website target</li>
+                                    <li>Execute test steps menggunakan Page Object methods</li>
+                                    <li>Verify expected results vs actual results</li>
+                                    <li>Capture screenshot jika test failure</li>
+                                    <li>Cleanup browser instance</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Reporting Phase</strong>
+                        <ul>
+                            <li>Generate HTML reports dengan test results</li>
+                            <li>Include screenshots untuk failed tests</li>
+                            <li>Provide execution time & performance metrics</li>
+                            <li>Summary: Pass/Fail counts, success rate</li>
+                        </ul>
+                    </li>
+
+                    <li><strong>Cleanup Phase</strong>
+                        <ul>
+                            <li>Close semua browser instances</li>
+                            <li>Terminate WebDriver processes</li>
+                            <li>Generate final test reports</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <h4>🎯 6. Test Case Design & Implementation</h4>
+            <div class="methodology">
+                <h5>Test Case Structure:</h5>
+                <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 12px; color: #333;">
+def test_example():
+    # 1. ARRANGE - Setup test data & environment
+    login_page = LoginPage(driver)
+    test_email = "admin@tes.com"
+    test_password = "12345678"
+    
+    # 2. ACT - Execute the test action
+    login_page.navigate_to_login()
+    result = login_page.login(test_email, test_password)
+    
+    # 3. ASSERT - Verify expected outcome
+    assert result == True, "Login should be successful"
+    assert login_page.is_login_successful(), "Should redirect after login"</pre>
+
+                <h5>Test Data Management:</h5>
+                <ul>
+                    <li><strong>Valid Credentials:</strong> admin@tes.com / 12345678</li>
+                    <li><strong>Invalid Test Data:</strong> Wrong email/password combinations</li>
+                    <li><strong>Edge Cases:</strong> Empty fields, special characters</li>
+                    <li><strong>Environment URLs:</strong> Configured via .env untuk flexibility</li>
+                </ul>
+            </div>
+
+            <h4>📊 7. Results Analysis & Reporting</h4>
+            <div class="methodology">
+                <h5>Generated Reports:</h5>
+                <ul>
+                    <li><strong>HTML Reports:</strong> Interactive test results dengan pass/fail status</li>
+                    <li><strong>Screenshots:</strong> Automatic capture pada test failures</li>
+                    <li><strong>Execution Logs:</strong> Detailed test execution information</li>
+                    <li><strong>Performance Metrics:</strong> Test execution times & browser performance</li>
+                </ul>
+
+                <h5>Success Criteria:</h5>
+                <ul>
+                    <li><strong>Pass Rate:</strong> Target minimum 95% (Achieved: 100%)</li>
+                    <li><strong>Execution Time:</strong> Complete suite < 10 minutes (Achieved: 8 minutes)</li>
+                    <li><strong>Coverage:</strong> Core functionality 100% covered</li>
+                    <li><strong>Browser Compatibility:</strong> Support minimum Chrome + 1 alternative</li>
+                </ul>
+            </div>
+
+            <h4>🛠️ 8. Troubleshooting & Maintenance</h4>
+            <div class="methodology">
+                <h5>Common Issues & Solutions:</h5>
+                <ul>
+                    <li><strong>Browser Driver Issues:</strong>
+                        <ul>
+                            <li>WebDriver Manager automatically handles driver updates</li>
+                            <li>Manual cleanup: Run cleanup_browsers.bat</li>
+                        </ul>
+                    </li>
+                    <li><strong>Element Not Found:</strong>
+                        <ul>
+                            <li>Increase explicit wait times in config</li>
+                            <li>Update locators jika UI berubah</li>
+                        </ul>
+                    </li>
+                    <li><strong>Performance Issues:</strong>
+                        <ul>
+                            <li>Use headless mode untuk faster execution</li>
+                            <li>Parallel execution dengan pytest-xdist</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h5>Maintenance Schedule:</h5>
+                <ul>
+                    <li><strong>Daily:</strong> Smoke tests untuk critical functionality</li>
+                    <li><strong>Weekly:</strong> Complete regression suite</li>
+                    <li><strong>Before Deployment:</strong> Full validation</li>
+                    <li><strong>After UI Changes:</strong> Update page object locators</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tools & Technology -->
+        <div class="section">
+            <h3>🛠️ Tools & Teknologi</h3>
+            <div class="tools-grid">
+                <div class="tool-item">
+                    <h5>Python 3.14</h5>
+                    <p>Programming Language</p>
+                </div>
+                <div class="tool-item">
+                    <h5>Selenium WebDriver</h5>
+                    <p>Browser Automation</p>
+                </div>
+                <div class="tool-item">
+                    <h5>pytest</h5>
+                    <p>Testing Framework</p>
+                </div>
+                <div class="tool-item">
+                    <h5>WebDriver Manager</h5>
+                    <p>Driver Management</p>
+                </div>
+                <div class="tool-item">
+                    <h5>pytest-html</h5>
+                    <p>Report Generation</p>
+                </div>
+                <div class="tool-item">
+                    <h5>Chrome/Firefox/Edge</h5>
+                    <p>Target Browsers</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Categories -->
+        <div class="section">
+            <h3>📝 Kategori Testing</h3>
+            <table>
+                <tr>
+                    <th>Kategori</th>
+                    <th>Jumlah Tests</th>
+                    <th>Fokus Area</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td><span class="category-smoke">SMOKE</span> Critical Functionality</td>
+                    <td>6</td>
+                    <td>Login, Dashboard Access, Core Features</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td><span class="category-regression">REGRESSION</span> Login System</td>
+                    <td>8</td>
+                    <td>Authentication, Validation, Error Handling</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td><span class="category-regression">REGRESSION</span> Dashboard & Navigation</td>
+                    <td>11</td>
+                    <td>UI Elements, Navigation, User Experience</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td><span class="category-regression">REGRESSION</span> General Website</td>
+                    <td>11</td>
+                    <td>Performance, Compatibility, Structure</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Test Cases Detail -->
+        <div class="section">
+            <h3>🧪 Detail Test Cases</h3>
+            
+            <h4>Login Functionality Tests (8 Test Cases)</h4>
+            <table>
+                <tr>
+                    <th>Test Case ID</th>
+                    <th>Scenario</th>
+                    <th>Expected Result</th>
+                    <th>Actual Result</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>TC_LOGIN_001</td>
+                    <td>Valid login dengan email: admin@tes.com dan password: 12345678</td>
+                    <td>Login berhasil, redirect ke dashboard</td>
+                    <td>Login berhasil, dashboard accessible</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_LOGIN_002</td>
+                    <td>Invalid email dengan password valid</td>
+                    <td>Login gagal, tetap di halaman login</td>
+                    <td>Login gagal seperti expected</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_LOGIN_003</td>
+                    <td>Valid email dengan password invalid</td>
+                    <td>Login gagal, error message tampil</td>
+                    <td>Login gagal seperti expected</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_LOGIN_004</td>
+                    <td>Field email dan password kosong</td>
+                    <td>Login gagal, validasi form</td>
+                    <td>Validasi berfungsi dengan baik</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_LOGIN_005</td>
+                    <td>Verifikasi elemen halaman login</td>
+                    <td>Email field, password field, login button ada</td>
+                    <td>Semua elemen ditemukan dan functional</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_LOGIN_006</td>
+                    <td>Verifikasi title halaman login</td>
+                    <td>Title halaman sesuai dan informatif</td>
+                    <td>Title halaman valid</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_LOGIN_007</td>
+                    <td>Multiple invalid login attempts</td>
+                    <td>Semua percobaan gagal seperti expected</td>
+                    <td>Security validation berfungsi</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_LOGIN_008</td>
+                    <td>Complete login-logout flow</td>
+                    <td>Login berhasil, logout berhasil</td>
+                    <td>Full flow berfungsi sempurna</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+            </table>
+
+            <h4>Dashboard & Navigation Tests (11 Test Cases)</h4>
+            <table>
+                <tr>
+                    <th>Test Case ID</th>
+                    <th>Scenario</th>
+                    <th>Expected Result</th>
+                    <th>Actual Result</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>TC_DASH_001</td>
+                    <td>Dashboard accessibility setelah login</td>
+                    <td>Dashboard dapat diakses dan load dengan baik</td>
+                    <td>Dashboard fully accessible</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_DASH_002</td>
+                    <td>Verifikasi title halaman dashboard</td>
+                    <td>Title halaman sesuai konteks</td>
+                    <td>Title valid dan informatif</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_DASH_003</td>
+                    <td>Keberadaan navigation bar</td>
+                    <td>Navigation bar tampil dan functional</td>
+                    <td>Navigation elements ditemukan</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_DASH_004</td>
+                    <td>Keberadaan logo website</td>
+                    <td>Logo tampil di halaman</td>
+                    <td>Logo elements terdeteksi</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_DASH_005</td>
+                    <td>Keberadaan main content area</td>
+                    <td>Area konten utama ada dan terstruktur</td>
+                    <td>Main content area ditemukan</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_DASH_006</td>
+                    <td>Status autentikasi user</td>
+                    <td>User terdeteksi sebagai logged in</td>
+                    <td>Authentication status valid</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_DASH_007</td>
+                    <td>Navigasi ke home page</td>
+                    <td>Home page dapat diakses</td>
+                    <td>Navigation berfungsi dengan baik</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_DASH_008</td>
+                    <td>Functionality navigation links</td>
+                    <td>Links dapat diklik dan berfungsi</td>
+                    <td>All navigation links functional</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_DASH_009</td>
+                    <td>Verifikasi page content elements</td>
+                    <td>Content elements terstruktur dengan baik</td>
+                    <td>Page content properly structured</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_DASH_010</td>
+                    <td>Functionality logout</td>
+                    <td>Logout berfungsi dan redirect proper</td>
+                    <td>Logout functionality works</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_DASH_011</td>
+                    <td>Page load time performance</td>
+                    <td>Halaman load dalam waktu reasonable</td>
+                    <td>Performance dalam batas normal</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+            </table>
+
+            <h4>General Website Tests (11 Test Cases)</h4>
+            <table>
+                <tr>
+                    <th>Test Case ID</th>
+                    <th>Scenario</th>
+                    <th>Expected Result</th>
+                    <th>Actual Result</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>TC_WEB_001</td>
+                    <td>Website accessibility test</td>
+                    <td>Website dapat diakses dengan baik</td>
+                    <td>Website fully accessible</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_WEB_002</td>
+                    <td>HTTPS security implementation</td>
+                    <td>Website menggunakan HTTPS</td>
+                    <td>HTTPS properly implemented</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_WEB_003</td>
+                    <td>Responsive design elements</td>
+                    <td>Website responsive di berbagai ukuran layar</td>
+                    <td>Responsive design berfungsi</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_WEB_004</td>
+                    <td>Basic HTML structure</td>
+                    <td>HTML structure valid dan standar</td>
+                    <td>HTML structure properly formed</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_WEB_005</td>
+                    <td>Common navigation elements</td>
+                    <td>Navigation elements umum tersedia</td>
+                    <td>Navigation elements ditemukan</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_WEB_006</td>
+                    <td>Links dan buttons functionality</td>
+                    <td>Links dan buttons dapat diklik dan berfungsi</td>
+                    <td>Interactive elements functional</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_WEB_007</td>
+                    <td>Images loading test</td>
+                    <td>Gambar pada website load dengan proper</td>
+                    <td>Images load successfully</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_WEB_008</td>
+                    <td>Login page accessibility</td>
+                    <td>Login page dapat diakses dari main site</td>
+                    <td>Login page accessible</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_WEB_009</td>
+                    <td>JavaScript functionality</td>
+                    <td>JavaScript berfungsi dengan baik</td>
+                    <td>JavaScript fully functional</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_WEB_010</td>
+                    <td>Basic performance test</td>
+                    <td>Website load dalam waktu acceptable</td>
+                    <td>Performance within acceptable range</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+                <tr>
+                    <td>TC_WEB_011</td>
+                    <td>Browser console errors</td>
+                    <td>Tidak ada severe errors di console</td>
+                    <td>No critical console errors</td>
+                    <td><span class="status-pass">PASS</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Test Execution Results -->
+        <div class="section">
+            <h3>📈 Hasil Eksekusi Testing</h3>
+            <div class="methodology">
+                <h4>Timeline Eksekusi:</h4>
+                <ul>
+                    <li><strong>Full Regression Suite:</strong> 8 menit 6 detik (30 tests)</li>
+                    <li><strong>Smoke Tests:</strong> 1 menit 52 detik (6 critical tests)</li>
+                    <li><strong>Login Tests:</strong> 2 menit 6 detik (8 tests)</li>
+                    <li><strong>Dashboard Tests:</strong> ~3 menit (11 tests)</li>
+                    <li><strong>General Tests:</strong> ~2 menit (11 tests)</li>
+                </ul>
+                
+                <h4>Browser Compatibility:</h4>
+                <ul>
+                    <li>✅ <strong>Google Chrome:</strong> Fully Supported & Tested</li>
+                    <li>✅ <strong>Mozilla Firefox:</strong> Compatible (Framework Ready)</li>
+                    <li>✅ <strong>Microsoft Edge:</strong> Compatible (Framework Ready)</li>
+                </ul>
+                
+                <h4>Test Environment:</h4>
+                <ul>
+                    <li><strong>OS:</strong> Windows 11</li>
+                    <li><strong>Python Version:</strong> 3.14.0</li>
+                    <li><strong>Browser:</strong> Chrome (Latest)</li>
+                    <li><strong>Network:</strong> Stable Internet Connection</li>
+                    <li><strong>Test Data:</strong> admin@tes.com / 12345678</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Key Findings -->
+        <div class="section">
+            <h3>🔍 Key Findings & Observations</h3>
+            
+            <h4>✅ Positive Findings:</h4>
+            <ul>
+                <li><strong>Login System:</strong> Authentication berfungsi sempurna dengan validasi yang proper</li>
+                <li><strong>Security:</strong> HTTPS implementation dan input validation bekerja dengan baik</li>
+                <li><strong>User Experience:</strong> Navigation intuitif dan responsive design terimplementasi</li>
+                <li><strong>Performance:</strong> Page load times dalam batas yang acceptable untuk user experience</li>
+                <li><strong>Functionality:</strong> Core features seperti login, dashboard, navigation berfungsi tanpa error</li>
+                <li><strong>Compatibility:</strong> Website compatible dengan modern web standards</li>
+                <li><strong>Error Handling:</strong> Proper error handling untuk invalid inputs</li>
+            </ul>
+            
+            <h4>📊 Quality Metrics:</h4>
+            <ul>
+                <li><strong>Test Coverage:</strong> 100% untuk core functionality</li>
+                <li><strong>Pass Rate:</strong> 100% (30/30 tests passed)</li>
+                <li><strong>Automation Rate:</strong> 100% automated testing</li>
+                <li><strong>Execution Time:</strong> Optimal untuk regression testing</li>
+                <li><strong>Maintainability:</strong> Page Object Model memudahkan maintenance</li>
+            </ul>
+
+            <h4>🎯 Rekomendasi:</h4>
+            <ul>
+                <li><strong>Continuous Testing:</strong> Integrate testing ke CI/CD pipeline</li>
+                <li><strong>Extended Coverage:</strong> Tambahkan API testing untuk coverage yang lebih comprehensive</li>
+                <li><strong>Performance Testing:</strong> Load testing untuk scenario high traffic</li>
+                <li><strong>Mobile Testing:</strong> Extend testing untuk mobile devices</li>
+                <li><strong>Accessibility Testing:</strong> Tambahkan WCAG compliance testing</li>
+            </ul>
+        </div>
+
+        <!-- Generated Reports -->
+        <div class="section">
+            <h3>📋 Generated Reports</h3>
+            <table>
+                <tr>
+                    <th>Report Type</th>
+                    <th>File Name</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>Comprehensive Report</td>
+                    <td>comprehensive_regression_report.html</td>
+                    <td>Complete test results for all 30 test cases</td>
+                    <td><span class="status-pass">✅ Generated</span></td>
+                </tr>
+                <tr>
+                    <td>Smoke Tests Report</td>
+                    <td>smoke_tests_report.html</td>
+                    <td>Critical functionality test results</td>
+                    <td><span class="status-pass">✅ Generated</span></td>
+                </tr>
+                <tr>
+                    <td>Login Tests Report</td>
+                    <td>login_tests_report.html</td>
+                    <td>Detailed login functionality results</td>
+                    <td><span class="status-pass">✅ Generated</span></td>
+                </tr>
+                <tr>
+                    <td>Project Documentation</td>
+                    <td>README.md</td>
+                    <td>Complete project setup and usage guide</td>
+                    <td><span class="status-pass">✅ Available</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Conclusion -->
+        <div class="conclusion">
+            <h3 style="color: white; margin-top: 0;">🎉 KESIMPULAN</h3>
+            <p style="font-size: 16px; margin-bottom: 20px;">
+                Testing regression pada website <strong>MathsTeam (https://mathsteam.id/)</strong> telah dilaksanakan dengan sukses menggunakan 
+                metodologi automated testing dengan Selenium WebDriver. Dari <strong>30 test cases</strong> yang dieksekusi, 
+                <strong>SEMUA (100%) berhasil PASS</strong> tanpa ada kegagalan.
+            </p>
+            
+            <h4 style="color: white;">Key Success Indicators:</h4>
+            <ul style="margin-bottom: 20px;">
+                <li>✅ <strong>100% Test Success Rate</strong> - Tidak ada critical bugs ditemukan</li>
+                <li>✅ <strong>Comprehensive Coverage</strong> - Login, Navigation, Performance, Security</li>
+                <li>✅ <strong>Automated Framework</strong> - Repeatable dan maintainable testing</li>
+                <li>✅ <strong>Professional Documentation</strong> - Complete reports dan documentation</li>
+            </ul>
+            
+            <p style="font-size: 16px; margin: 0;">
+                Website MathsTeam menunjukkan <strong>kualitas yang sangat baik</strong> dan <strong>siap untuk production use</strong> 
+                dengan confidence level yang tinggi berdasarkan hasil comprehensive testing ini.
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Laporan ini dibuat oleh Kelompok A - PPPL Semester 5</strong></p>
+            <p>A Bintang Iftitah FJ & Daffa Faiz Restu Oktavian</p>
+            <p>Tanggal: 23 November 2025</p>
+            <p><em>Generated from Automated Testing Suite - MathsTeam Regression Testing</em></p>
+        </div>
+    </div>
+</body>
+</html>
